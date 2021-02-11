@@ -3,6 +3,7 @@
 import pytest
 
 from t02.skeleton import fib
+from t02.language import lang
 
 __author__ = "6af1545f7"
 __copyright__ = "6af1545f7"
@@ -19,3 +20,7 @@ def test_fib():
 
 def test_always_fails():
     assert False
+
+
+def test_lang():
+    assert lang()
