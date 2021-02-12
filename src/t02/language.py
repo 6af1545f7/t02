@@ -99,6 +99,42 @@ def deconstruct():
     return {'sequence' : r1, 'key' : r2, 'del' : r3}
 
 
+def names_tuple(*args):
+    return args
+
+
+def names_dict(**kwargs):
+    return kwargs
+
+
+def unpack():
+    """Demonstrate unpacking operators.
+    Returns:
+        dict1
+        """
+    num_list = [1, 2, 3, 4, 5]
+    num_list2 = [11, 12, 13, 14, 15]
+    print('num list:', *num_list)
+    print('num list merge:', *num_list, *num_list2)
+    new_list = [*num_list, *num_list2]
+    new_list2 = num_list + num_list2
+    name = 'Michael'
+    f1, *m1, l1 = name
+    f2, *m2, l2 = 'ma'
+    *names, = 'Michael', 'John', 'Nancy'
+    num_dict = {'a' : 1, 'b' : 2, 'c' : 3}
+    print('dict keys:', *num_dict)
+    #print('dict vals:', **num_dict)
+    num_dict2 = {'d' : 4, 'e' : 5, 'f' : 6}
+    new_dict = {**num_dict, **num_dict2}
+    return {'unpack': "one", 'concat' : new_list, 'add' : new_list2,
+            'name1' : [f1, m1, l1], 'name2' : [f2, m2, l2],
+            'names' : names,
+            'newdict' : new_dict,
+            'args' : names_tuple('Michael', 'John', 'Nancy'),
+            'kwargs' : names_dict(Jane='Doe', John='Smith')}
+
+
 def def_required(a, *b, c) : return [a, b, c]
 
 
@@ -314,6 +350,7 @@ def lang() :
          'collection_literals' : collection_literals(),
          'expressions' : expressions(),
          'deconstruct' : deconstruct(),
+         'unpack' : unpack(),
          'function' : function(),
          'condition' : condition(),
          'loop_while' : loop_while(),
