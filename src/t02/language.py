@@ -108,9 +108,11 @@ def names_dict(**kwargs):
 
 
 def unpack():
-    """Demonstrate unpacking operators.
+    """Demonstrate unpacking operators:
+    - '*' and '**' and
+    - '*args' and 'kwargs'.
     Returns:
-        dict1
+        dict
         """
     num_list = [1, 2, 3, 4, 5]
     num_list2 = [11, 12, 13, 14, 15]
@@ -124,7 +126,7 @@ def unpack():
     *names, = 'Michael', 'John', 'Nancy'
     num_dict = {'a' : 1, 'b' : 2, 'c' : 3}
     print('dict keys:', *num_dict)
-    #print('dict vals:', **num_dict)
+    # print('dict vals:', **num_dict)
     num_dict2 = {'d' : 4, 'e' : 5, 'f' : 6}
     new_dict = {**num_dict, **num_dict2}
     return {'unpack': "one", 'concat' : new_list, 'add' : new_list2,
@@ -133,6 +135,18 @@ def unpack():
             'newdict' : new_dict,
             'args' : names_tuple('Michael', 'John', 'Nancy'),
             'kwargs' : names_dict(Jane='Doe', John='Smith')}
+
+
+def comp() :
+    """Demonstrate list comprehension:
+    - .
+    Returns:
+        dict
+        """
+    fruits = ['apple', 'banana', "cherry", 'kiwi', 'mango']
+    newlist = [x for x in fruits if "a" in x]
+    newlist2 = [x for x in fruits if x != "apple"]
+    return {'list-comp' : newlist, 'list-comp2' : newlist2}
 
 
 def def_required(a, *b, c) : return [a, b, c]
@@ -351,6 +365,7 @@ def lang() :
          'expressions' : expressions(),
          'deconstruct' : deconstruct(),
          'unpack' : unpack(),
+         'comprehension' : comp(),
          'function' : function(),
          'condition' : condition(),
          'loop_while' : loop_while(),
