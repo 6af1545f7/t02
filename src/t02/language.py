@@ -37,6 +37,7 @@ def literals() :
 
 def collection_literals() :
     """Demontrate expressions.
+    Note that tuples are immutable, while lists are mutable.
 
     Returns:
       dict: r of all literal types
