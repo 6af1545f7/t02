@@ -5,6 +5,7 @@ import pytest
 from t02.skeleton import fib
 from t02.language import lang
 from t02.conway import conway
+from t02.classex import classTest
 
 __author__ = "6af1545f7"
 __copyright__ = "6af1545f7"
@@ -25,6 +26,10 @@ def test_always_fails():
 
 def test_lang():
     assert lang()
+
+
+def test_class():
+    assert classTest()
 
 
 def test_conway():
