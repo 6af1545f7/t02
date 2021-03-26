@@ -6,6 +6,7 @@ from t02.skeleton import fib
 from t02.language import lang
 from t02.conway import conway
 from t02.classex import classTest
+from t02.persist import persistTest
 
 __author__ = "6af1545f7"
 __copyright__ = "6af1545f7"
@@ -34,3 +35,7 @@ def test_class():
 
 def test_conway():
     assert conway()
+
+
+def test_persist():
+    assert persistTest()

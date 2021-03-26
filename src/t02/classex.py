@@ -3,6 +3,10 @@ This is an example of classes for a Person, with data, behaviour,
 operator overloading and inheritance.
 """
 
+__author__ = "6af1545f7"
+__copyright__ = "6af1545f7"
+__license__ = "mit"
+
 
 class Person:
     """a general person
