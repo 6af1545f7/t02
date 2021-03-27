@@ -6,6 +6,8 @@ __author__ = "6af1545f7"
 __copyright__ = "6af1545f7"
 __license__ = "mit"
 
+import struct
+
 """
 flat files: open/close,
 text 'r' or 'w';
@@ -17,10 +19,13 @@ seek, flushfileno
 
 def flatFile() :
     """
-    Example of writing to and reading from asci flat files:
+    Demonstrates writing to and reading from asci flat files:
     - open() in read, write and read/write modes;
     - close() and implicit closing;
     - realine(s)(), and seek() to truncate reading.
+
+    Returns:
+      dict: r of all strings read from file.
     """
     fn = 'tests/data.txt'
     file = open(fn, 'w')
@@ -50,11 +55,64 @@ def flatFile() :
     return r
 
 
+def binFile() :
+    """
+    Demonstrates writing to and reading from binary flat files:
+    - Write in ascii and binary;
+    - decode() to various representations;
+    - en/decode using structpack() and unpack();
+    - Read as binary with implicit and explicit translation.
+
+    Returns:
+      dict: r of all binary data read from file.
+    """
+    fn = 'tests/data.txt'
+    bfn = 'tests/data.bin'
+    b1 = open(fn, 'rb').read()
+    print(open(fn, 'rb').read())
+
+    open(bfn, 'wb').write(b'Spam\n')
+
+    d = 'Sp\xe4m\n'
+    """
+    Ascii cannot represent binary, so throws and exception for:
+    d.encode('ascii')
+    """
+
+    open(bfn, 'w', encoding='latin1').write(d)
+    b2 = open(bfn, 'r', encoding='latin1').read()
+    b3 = open(bfn, 'rb').read()
+
+    ds = struct.pack('>i4shf', 2, b'spam', 3, 1.234)
+    f = open(bfn, 'wb')
+    f.write(ds)
+    f.close()
+    f = open(bfn, 'rb')
+    ds = f.read()
+    vs = struct.unpack('>i4shf', ds)
+    f.close()
+
+    r = {'binAscii' : b1, 'binFile' : open(bfn, 'rb').read(),
+         'latin1' : b2, 'binlatin1' : b3,
+         'encode' : {'latin1' : d.encode('latin1'),
+                     'utf8' : d.encode('utf8'),
+                     'utf16' : d.encode('utf16'),
+                     'cp500' : d.encode("cp500")},
+         'struct' : vs}
+    return r
+
+
 if __name__ == '__main__' :
-    file = open('tests/data.txt', 'w')
-    file.write('Hello file world!\n')
-    file.write('Bye   file world.\n')
-    file.close()
+    fn = 'tests/data.txt'
+    bfn = 'tests/data.bin'
+    b = open(fn, 'rb').read()
+    print(open(fn, 'rb').read())
+
+    open(bfn, 'wb').write(b'Spam\n')
+    b = open(bfn, 'rb').read()
+    print(open(bfn, 'rb').read())
+
+    bf = open(fn, 'rb')
 
     file = open('tests/data.txt', 'r')
     for line in file.readlines() :
@@ -71,5 +129,5 @@ if __name__ == '__main__' :
 
 
 def persistTest() :
-    r = {'flatFile' : flatFile()}
+    r = {'flatFile' : flatFile(), 'binFile' : binFile()}
     return r
