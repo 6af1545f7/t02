@@ -102,6 +102,38 @@ def binFile() :
     return r
 
 
+def raFile() :
+    """
+    Demonstrates random access to binary flat files.
+
+    Returns:
+      dict: r.
+    """
+    recs = [bytes([char] * 8) for char in b'spam']
+    bfn = 'tests/ra.bin'
+    f = open(bfn, 'w+b')
+    for rec in recs :
+        s = f.write(rec)
+    f.flush()
+    pos = f.seek(0)
+    d1 = f.read()
+    f.close()
+    f = open(bfn, 'r+b')
+    d2 = f.read()
+    rec = b'X' * 8
+    f.seek(0)
+    f.write(rec)
+    f.seek(len(rec) * 2)
+    f.write(b'Y' * 8)
+    f.seek(8)
+    d3 = f.read(len(rec))
+    f.seek(0)
+    d4 = f.read()
+    r = {'ra1' : d1, 'size' : s, 'pos' : pos, 'ra2' : d2,
+         'rec3' : d3, 'ra3' : d4}
+    return r
+
+
 if __name__ == '__main__' :
     fn = 'tests/data.txt'
     bfn = 'tests/data.bin'
@@ -129,5 +161,6 @@ if __name__ == '__main__' :
 
 
 def persistTest() :
-    r = {'flatFile' : flatFile(), 'binFile' : binFile()}
+    r = {'flatFile' : flatFile(), 'binFile' : binFile(),
+         'randAccess' : raFile()}
     return r
