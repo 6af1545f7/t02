@@ -9,6 +9,7 @@ __license__ = "mit"
 import struct
 import dbm
 import pickle
+import shelve
 
 """
 flat files: open/close,
@@ -29,13 +30,13 @@ def flatFile() :
     Returns:
       dict: r of all strings read from file.
     """
-    fn = 'tests/data.txt'
+    fn = 'tests/data/data.txt'
     file = open(fn, 'w')
     file.write('Hello file world!\n')
     file.write('Bye   file world.\n')
     file.close()
 
-    open('tests/data.txt', 'a').write('Append file world!\n')
+    open('tests/data/data.txt', 'a').write('Append file world!\n')
 
     with open(fn, 'r') as file:
         lns = file.readlines()
@@ -68,8 +69,8 @@ def binFile() :
     Returns:
       dict: r of all binary data read from file.
     """
-    fn = 'tests/data.txt'
-    bfn = 'tests/data.bin'
+    fn = 'tests/data/data.txt'
+    bfn = 'tests/data/data.bin'
     b1 = open(fn, 'rb').read()
     print(open(fn, 'rb').read())
 
@@ -112,7 +113,7 @@ def raFile() :
       dict: r.
     """
     recs = [bytes([char] * 8) for char in b'spam']
-    bfn = 'tests/ra.bin'
+    bfn = 'tests/data/ra.bin'
     f = open(bfn, 'w+b')
     for rec in recs :
         s = f.write(rec)
@@ -146,7 +147,7 @@ def dbmFile() :
     Returns:
       dict: r.
     """
-    dbmf = 'tests/dbm.bin'
+    dbmf = 'tests/data/dbm'
     f = dbm.open(dbmf, 'c')
     f['Batman'] = 'Pow!'
     f.keys()
@@ -176,7 +177,7 @@ def pklFile() :
     Returns:
       dict: r.
     """
-    pklf = 'tests/pkl.bin'
+    pklf = 'tests/data/pkl.bin'
     o = {'a' : [1, 2, 3],
          'b' : ['spam', 'eggs'],
          'c' : {'name' : 'bob'}}
@@ -195,9 +196,39 @@ def pklFile() :
     return r
 
 
+def slvFile() :
+    """
+    Demonstrates shelf file, which serialises an object and stores it
+    under a key.
+    See also OODB, which may be better for storing class objects, and has more
+    sophisticated query capabilities, including catalogues.
+    For more general queries see SQL support.
+
+    Returns:
+      dict: r.
+    """
+    f = 'tests/data/slv'
+    db = shelve.open(f)
+    o1 = ['The', 'bright', ('side', 'of'), ['life']]
+    o2 = {'name' : 'Brian', 'age' : 33, 'motto' : o1}
+
+    db['brian'] = o2
+    db['knight'] = {'name' : 'Knight', 'motto' : 'Ni!'}
+    db.close()
+
+    db = shelve.open(f)
+    l1 = len(db)
+    ks = list(db.keys())
+    o3 = db['knight']
+    db.close()
+
+    r = {'len' : l1, 'keys' : ks, 'knight' : o3}
+    return r
+
+
 if __name__ == '__main__' :
-    fn = 'tests/data.txt'
-    bfn = 'tests/data.bin'
+    fn = 'tests/data/data.txt'
+    bfn = 'tests/data/data.bin'
     b = open(fn, 'rb').read()
     print(open(fn, 'rb').read())
 
@@ -207,14 +238,14 @@ if __name__ == '__main__' :
 
     bf = open(fn, 'rb')
 
-    file = open('tests/data.txt', 'r')
+    file = open('tests/data/data.txt', 'r')
     for line in file.readlines() :
         print(line, end="")
         file.close()
 
-    open('tests/data.txt', 'w').write('Overwrite file world!\n')
+    open('tests/data/data.txt', 'w').write('Overwrite file world!\n')
 
-    with open('tests/data.txt', 'r') as myfile:
+    with open('tests/data/data.txt', 'r') as myfile:
         lines = myfile.readlines()
         print(lines)
         for line in lines:
@@ -223,5 +254,6 @@ if __name__ == '__main__' :
 
 def persistTest() :
     r = {'flatFile' : flatFile(), 'binFile' : binFile(),
-         'randAccess' : raFile(), 'dbm' : dbmFile()}
+         'randAccess' : raFile(), 'dbm' : dbmFile(),
+         'pickle' : pklFile(), 'shelve' : slvFile()}
     return r
