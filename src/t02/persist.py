@@ -7,6 +7,7 @@ __copyright__ = "6af1545f7"
 __license__ = "mit"
 
 import struct
+import dbm
 
 """
 flat files: open/close,
@@ -134,6 +135,37 @@ def raFile() :
     return r
 
 
+def dbmFile() :
+    """
+    Demonstrates DBM files:
+    - CRUD by key;
+    - checking whether record with key exists;
+    - getting keys.
+
+    Returns:
+      dict: r.
+    """
+    dbmf = 'tests/dbm.bin'
+    f = dbm.open(dbmf, 'c')
+    f['Batman'] = 'Pow!'
+    f.keys()
+    r1 = f['Batman']
+    who = ['Robin', 'Cat-woman', 'Joker']
+    what = ['Bang!', 'Splat!', 'Wham!']
+    for i in range(len(who)) :
+        f[who[i]] = what[i]
+    f.keys()
+    ks1 = f.keys()
+    r2 = {'len' : len(f), 'found' : 'Robin' in f,
+          'Joker' : f['Joker']}
+    f['Batman'] = 'Ka-Boom!'
+    del f['Robin']
+    ks2 = f.keys()
+    f.close()
+    r = {'r1' : r1, 'keys' : ks1, 'r2' : r2, 'keys-after' : ks2}
+    return r
+
+
 if __name__ == '__main__' :
     fn = 'tests/data.txt'
     bfn = 'tests/data.bin'
@@ -162,5 +194,5 @@ if __name__ == '__main__' :
 
 def persistTest() :
     r = {'flatFile' : flatFile(), 'binFile' : binFile(),
-         'randAccess' : raFile()}
+         'randAccess' : raFile(), 'dbm' : dbmFile()}
     return r
