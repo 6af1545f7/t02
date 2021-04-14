@@ -8,6 +8,7 @@ __license__ = "mit"
 
 import struct
 import dbm
+import pickle
 
 """
 flat files: open/close,
@@ -137,7 +138,7 @@ def raFile() :
 
 def dbmFile() :
     """
-    Demonstrates DBM files:
+    Demonstrates DBM files, which store as binary objects:
     - CRUD by key;
     - checking whether record with key exists;
     - getting keys.
@@ -163,6 +164,34 @@ def dbmFile() :
     ks2 = f.keys()
     f.close()
     r = {'r1' : r1, 'keys' : ks1, 'r2' : r2, 'keys-after' : ks2}
+    return r
+
+
+def pklFile() :
+    """
+    Demonstrates pickle file, which serialises objects:
+    - Create and read binary.
+    - Object returned is '==' not 'is'.
+
+    Returns:
+      dict: r.
+    """
+    pklf = 'tests/pkl.bin'
+    o = {'a' : [1, 2, 3],
+         'b' : ['spam', 'eggs'],
+         'c' : {'name' : 'bob'}}
+    f = open(pklf, 'wb')
+    P = pickle.Pickler(f)
+    P.dump('1234')
+    pickle.dump(o, f)
+    f.close()
+    f = open(pklf, 'rb')
+    U = pickle.Unpickler(f)
+    o1 = U.load()
+    o2 = pickle.load(f)
+    f.close()
+
+    r = {'p1' : o1, 'p2' : o2, '==' : o == o2, 'is' : o is o2}
     return r
 
 
