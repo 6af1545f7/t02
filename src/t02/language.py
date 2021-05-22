@@ -5,6 +5,7 @@ This is ...
 
 import sys
 import logging
+import traceback
 
 from t02 import __version__
 
@@ -355,6 +356,49 @@ def stack() :
     return r
 
 
+class NotStringError(Exception):
+    """Example user-defined exception."""
+    def __init(self, message):
+        self.message = message
+
+
+def as_int(s) :
+    """Demonstration of error handling:
+    - try, except, finally;
+    - raise.
+
+    Returns:
+      dict:
+    """
+    e = None
+    i = None
+    try:
+        if type(s) is str :
+            i = int(s)
+        else :
+            raise NotStringError()
+    except ValueError :
+        print('ValueError: ')
+        traceback.print_exc()
+        e = "argument cannot be parsed as an integer."
+    except NotStringError :
+        print('NotString error: ')
+        e = "argument is not a str."
+    else:
+        e = None
+        i = None
+    finally:
+        print('attempted to parse as integer: ', s)
+    r = {'exception' : e, 'integer' : i}
+    return r
+
+
+def exception() :
+    r = {'ok' : as_int("100"), 'type error' : as_int(100),
+         'process error' : as_int("sdf")}
+    return r
+
+
 def lang() :
     """Test module.
 
@@ -375,5 +419,6 @@ def lang() :
          'iterator' : iterator(),
          'seqs_lib' : seqs_lib(),
          'evaluation' : evaluation(),
-         'stack': stack()}
+         'stack': stack(),
+         'exception': exception()}
     return r
